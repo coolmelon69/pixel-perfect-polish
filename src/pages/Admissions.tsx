@@ -57,7 +57,7 @@ const programmes: Programme[] = [
     color: "red",
   },
   {
-    title: "UNDERGRADUATE",
+    title: "BACHELOR",
     status: "OPEN",
     malaysianLink: "#",
     internationalLink: "#",
