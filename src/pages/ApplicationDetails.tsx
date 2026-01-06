@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { User, ChevronDown, ChevronUp, Save } from "lucide-react";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -36,9 +39,15 @@ const ApplicationDetails = () => {
     householdIncome: "",
     bshrRecipient: "no",
     staffId: "",
+    secondarySchoolType: "",
+    secondarySchoolName: "",
+    highestQualification: "",
+    yearOfHighestQualification: "",
+    yearOfSPM: "",
+    noDisciplinaryRecord: false,
   });
 
-  const handleInputChange = (field: string, value: string) => {
+  const handleInputChange = (field: string, value: string | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -56,12 +65,21 @@ const ApplicationDetails = () => {
     });
   };
 
+  const handleSaveEducationDetails = () => {
+    toast({
+      title: "Education Details Saved",
+      description: "Your education and qualification details have been saved successfully.",
+    });
+  };
+
   const userName = "testing";
   const applicantId = "902467";
   const intake = "January 2026";
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen flex flex-col bg-background">
+      <Header />
+      <main className="flex-1">
       {/* Hero Banner */}
       <div className="relative h-48 md:h-56 overflow-hidden">
         <img
@@ -133,56 +151,19 @@ const ApplicationDetails = () => {
                     placeholder="example@email.com"
                   />
                   
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-                    <div className="md:col-span-1">
-                      <Label className="text-sm font-medium text-muted-foreground mb-2 block">
-                        Handphone Number
-                      </Label>
-                      <div className="flex gap-2">
-                        <Select
-                          value={formData.phonePrefix}
-                          onValueChange={(v) => handleInputChange("phonePrefix", v)}
-                        >
-                          <SelectTrigger className="w-24">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="010">010</SelectItem>
-                            <SelectItem value="011">011</SelectItem>
-                            <SelectItem value="012">012</SelectItem>
-                            <SelectItem value="013">013</SelectItem>
-                            <SelectItem value="014">014</SelectItem>
-                            <SelectItem value="016">016</SelectItem>
-                            <SelectItem value="017">017</SelectItem>
-                            <SelectItem value="018">018</SelectItem>
-                            <SelectItem value="019">019</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <div className="relative flex-1">
-                          <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                          <Input
-                            className="pl-10"
-                            value={formData.phoneNumber}
-                            onChange={(e) => handleInputChange("phoneNumber", e.target.value)}
-                            placeholder="8829932"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="md:col-span-2">
-                      <Label className="text-sm font-medium text-muted-foreground mb-2 block">
-                        Handphone Number 2
-                      </Label>
-                      <div className="relative">
-                        <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                        <Input
-                          className="pl-10"
-                          value={formData.phoneNumber2}
-                          onChange={(e) => handleInputChange("phoneNumber2", e.target.value)}
-                          placeholder="0138912020 (Eg. 0389212020)"
-                        />
-                      </div>
-                    </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      label="Handphone Number"
+                      value={formData.phoneNumber}
+                      onChange={(v) => handleInputChange("phoneNumber", v)}
+                      placeholder="0138912020 (Eg. 0389212020)"
+                    />
+                    <FormField
+                      label="Handphone Number 2"
+                      value={formData.phoneNumber2}
+                      onChange={(v) => handleInputChange("phoneNumber2", v)}
+                      placeholder="0138912020 (Eg. 0389212020)"
+                    />
                   </div>
 
                   <div className="flex justify-center pt-4">
@@ -212,9 +193,134 @@ const ApplicationDetails = () => {
           <CollapsibleContent>
             <Card className="rounded-t-none border-t-0 mt-0">
               <CardContent className="pt-6">
-                <p className="text-muted-foreground text-center py-8">
-                  Education and qualification details form will be displayed here.
-                </p>
+                <div className="space-y-5">
+                  {/* Secondary School Type */}
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">
+                      Secondary School Type :
+                    </Label>
+                    <Select
+                      value={formData.secondarySchoolType}
+                      onValueChange={(v) => handleInputChange("secondarySchoolType", v)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select secondary school type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="national-public">National Public School</SelectItem>
+                        <SelectItem value="national-religious">National Religious School</SelectItem>
+                        <SelectItem value="chinese-independent">Chinese Independent School</SelectItem>
+                        <SelectItem value="tamil-school">Tamil School</SelectItem>
+                        <SelectItem value="private">Private School</SelectItem>
+                        <SelectItem value="international">International School</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Secondary School Name */}
+                  <FormField
+                    label="Secondary School Name :"
+                    value={formData.secondarySchoolName}
+                    onChange={(v) => handleInputChange("secondarySchoolName", v)}
+                    placeholder="Enter secondary school name"
+                  />
+
+                  {/* Highest Qualification to Apply */}
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">
+                      Highest Qualification to Apply :
+                    </Label>
+                    <Select
+                      value={formData.highestQualification}
+                      onValueChange={(v) => handleInputChange("highestQualification", v)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select highest qualification" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="spm">SPM</SelectItem>
+                        <SelectItem value="o-level">O-Level</SelectItem>
+                        <SelectItem value="svm">SVM</SelectItem>
+                        <SelectItem value="stpm">STPM</SelectItem>
+                        <SelectItem value="a-level">A-Level</SelectItem>
+                        <SelectItem value="diploma">Diploma</SelectItem>
+                        <SelectItem value="degree">Degree</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Year of Highest Qualification */}
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">
+                      Year of Highest Qualification :
+                    </Label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        type="number"
+                        className="pl-10"
+                        value={formData.yearOfHighestQualification}
+                        onChange={(e) => handleInputChange("yearOfHighestQualification", e.target.value)}
+                        placeholder="2019"
+                        min="1980"
+                        max="2030"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Year of SPM/O-Level/SVM */}
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">
+                      Year of SPM/O-Level/SVM :
+                    </Label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        type="number"
+                        className="pl-10"
+                        value={formData.yearOfSPM}
+                        onChange={(e) => handleInputChange("yearOfSPM", e.target.value)}
+                        placeholder="2019"
+                        min="1980"
+                        max="2030"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Disciplinary & Termination */}
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">
+                      Disciplinary & Termination :
+                    </Label>
+                    <div className="flex items-start space-x-3 pt-2">
+                      <Checkbox
+                        id="disciplinary"
+                        checked={formData.noDisciplinaryRecord}
+                        onCheckedChange={(checked) =>
+                          handleInputChange("noDisciplinaryRecord", checked === true)
+                        }
+                        className="mt-1"
+                      />
+                      <div className="flex-1">
+                        <Label
+                          htmlFor="disciplinary"
+                          className="text-sm font-normal text-foreground cursor-pointer leading-relaxed"
+                        >
+                          I declare that I have no discipline and termination record from other institutions.
+                        </Label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-center pt-4">
+                    <Button onClick={handleSaveEducationDetails} className="px-8">
+                      <Save className="mr-2 h-4 w-4" />
+                      Save Education Details
+                    </Button>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </CollapsibleContent>
@@ -293,6 +399,8 @@ const ApplicationDetails = () => {
           </CollapsibleContent>
         </Collapsible>
       </div>
+      </main>
+      <Footer />
     </div>
   );
 };

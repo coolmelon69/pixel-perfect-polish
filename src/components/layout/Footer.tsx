@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import unitenLogo from "@/assets/uniten_logo.png";
 
 const Footer = () => {
   return (
@@ -8,16 +9,11 @@ const Footer = () => {
           {/* Logo & About */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-2 mb-4">
-              <div className="flex flex-col items-center">
-                <span className="text-xs font-semibold tracking-wider opacity-80">UNIVERSITI</span>
-                <div className="flex items-center gap-1">
-                  <span className="text-xs font-bold tracking-wider">TENAGA</span>
-                  <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
-                    <div className="w-3 h-3 rounded-full bg-accent" />
-                  </div>
-                </div>
-                <span className="text-xs font-semibold tracking-wider opacity-80">NASIONAL</span>
-              </div>
+              <img 
+                src={unitenLogo} 
+                alt="UNITEN - Universiti Tenaga Nasional" 
+                className="h-14 md:h-16 w-auto object-contain"
+              />
             </div>
             <p className="text-sm text-topbar-foreground/80 max-w-md">
               UNITEN, The Energy University, is a leading institution in Malaysia providing quality education

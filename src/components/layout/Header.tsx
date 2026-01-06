@@ -8,6 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import unitenLogo from "@/assets/uniten_logo.png";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -26,19 +27,11 @@ const Header = () => {
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3">
-              <div className="flex flex-col items-center">
-                <div className="flex items-center gap-1">
-                  <span className="text-xs font-semibold text-muted-foreground tracking-wider">UNIVERSITI</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="text-xs font-bold text-foreground tracking-wider">TENAGA</span>
-                  <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
-                    <div className="w-4 h-4 rounded-full bg-accent" />
-                  </div>
-                </div>
-                <span className="text-xs font-semibold text-muted-foreground tracking-wider">NASIONAL</span>
-                <span className="text-[10px] text-muted-foreground mt-0.5">The Energy University</span>
-              </div>
+              <img 
+                src={unitenLogo} 
+                alt="UNITEN - Universiti Tenaga Nasional" 
+                className="h-16 md:h-20 w-auto object-contain"
+              />
             </Link>
 
             {/* Desktop Navigation */}
@@ -58,9 +51,12 @@ const Header = () => {
                   <ChevronDown className="h-4 w-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem>Student Portal</DropdownMenuItem>
-                  <DropdownMenuItem>Staff Portal</DropdownMenuItem>
-                  <DropdownMenuItem>Admin Panel</DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/apply/foundation-malaysian">Student Portal</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/apply/foundation-malaysian">Staff Portal</Link>
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
 

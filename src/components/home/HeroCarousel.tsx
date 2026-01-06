@@ -4,7 +4,7 @@ import heroLibrary from "@/assets/hero-library.jpg";
 const slides = [
   {
     image: heroLibrary,
-    title: "UNITEN ONLINE APPLICATION SYSTEM",
+    title: "DEMO UNITEN ONLINE APPLICATION SYSTEM",
     subtitle: "Interested in UNITEN? Come and be our family.",
   },
 ];
