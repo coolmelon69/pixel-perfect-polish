@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { User, Save, CheckCircle2, Circle, ChevronLeft, ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import { User, Save, CheckCircle2, Circle, ChevronLeft, ChevronRight, Home } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
@@ -21,6 +22,7 @@ import heroImage from "@/assets/hero-library.jpg";
 
 const ApplicationDetails = () => {
   const [currentStep, setCurrentStep] = useState(1);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -68,6 +70,9 @@ const ApplicationDetails = () => {
   const handleNext = () => {
     if (currentStep < 3) {
       setCurrentStep(currentStep + 1);
+    } else if (currentStep === 3) {
+      // Submit the form
+      setIsSubmitted(true);
     }
   };
 
@@ -115,6 +120,34 @@ const ApplicationDetails = () => {
 
       {/* Main Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10 pb-12">
+        {/* Success Page */}
+        {isSubmitted ? (
+          <Card className="shadow-elegant">
+            <CardContent className="pt-12 pb-12">
+              <div className="flex flex-col items-center justify-center text-center py-8">
+                <div className="w-20 h-20 rounded-full bg-green-500/10 flex items-center justify-center mb-6 animate-in zoom-in duration-500">
+                  <CheckCircle2 className="w-12 h-12 text-green-600" />
+                </div>
+                <Badge variant="default" className="px-4 py-2 text-sm mb-4">
+                  Application ID: {applicantId}
+                </Badge>
+                <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
+                  Application Submitted Successfully!
+                </h2>
+                <p className="text-muted-foreground text-lg max-w-md mb-6">
+                  Thank you! Your application has been submitted successfully. We will contact you soon regarding your application.
+                </p>
+                <Button asChild className="flex items-center gap-2">
+                  <Link to="/">
+                    <Home className="h-4 w-4" />
+                    Return Home
+                  </Link>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ) : (
+          <>
         {/* Welcome Card */}
         <Card className="mb-6 shadow-elegant">
           <CardContent className="pt-6 pb-4">
@@ -495,7 +528,6 @@ const ApplicationDetails = () => {
 
                 <Button
                   onClick={handleNext}
-                  disabled={currentStep === 3}
                   className="flex items-center gap-2"
                 >
                   {currentStep === 3 ? "Submit" : "Next"}
@@ -505,6 +537,8 @@ const ApplicationDetails = () => {
             </div>
           </CardContent>
         </Card>
+        </>
+        )}
       </div>
       </main>
       <Footer />

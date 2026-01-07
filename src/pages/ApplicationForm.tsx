@@ -72,7 +72,7 @@ const ApplicationForm = () => {
                 {/* Google Sign-In Button */}
                 <Button
                   onClick={handleGoogleSignIn}
-                  className="w-full h-14 bg-white hover:bg-gray-50 text-gray-700 border-2 border-border hover:border-gray-300 shadow-sm hover:shadow-lg transition-all duration-200 font-medium text-base hover:-translate-y-0.5"
+                  className="w-full h-14 bg-white hover:bg-gray-50 text-gray-700 hover:text-gray-700 border-2 border-border hover:border-gray-300 shadow-sm hover:shadow-lg transition-all duration-200 font-medium text-base hover:-translate-y-0.5"
                   variant="outline"
                 >
                   <div className="flex items-center justify-center gap-3">
