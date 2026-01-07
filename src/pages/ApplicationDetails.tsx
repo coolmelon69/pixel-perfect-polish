@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { User, ChevronDown, ChevronUp, Save } from "lucide-react";
+import { User, Save, CheckCircle2, Circle, ChevronLeft, ChevronRight } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
@@ -14,20 +14,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import heroImage from "@/assets/hero-library.jpg";
 
 const ApplicationDetails = () => {
-  const [personalOpen, setPersonalOpen] = useState(true);
-  const [educationOpen, setEducationOpen] = useState(false);
-  const [otherOpen, setOtherOpen] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -71,6 +64,36 @@ const ApplicationDetails = () => {
       description: "Your education and qualification details have been saved successfully.",
     });
   };
+
+  const handleNext = () => {
+    if (currentStep < 3) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const steps = [
+    {
+      number: 1,
+      title: "Personal Details",
+      completed: currentStep > 1,
+    },
+    {
+      number: 2,
+      title: "Education & Qualification",
+      completed: currentStep > 2,
+    },
+    {
+      number: 3,
+      title: "Other Details",
+      completed: false,
+    },
+  ];
 
   const userName = "testing";
   const applicantId = "902467";
@@ -119,285 +142,369 @@ const ApplicationDetails = () => {
           </CardContent>
         </Card>
 
-        {/* Personal Details Section */}
-        <Collapsible open={personalOpen} onOpenChange={setPersonalOpen} className="mb-4">
-          <CollapsibleTrigger asChild>
-            <div className="flex items-center justify-between bg-primary text-primary-foreground px-4 py-3 rounded-t-lg cursor-pointer hover:bg-primary/90 transition-colors">
-              <span className="font-medium">Personal Details</span>
-              {personalOpen ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+        {/* Progress Indicator */}
+        <Card className="mb-6 shadow-elegant">
+          <CardContent className="pt-6 pb-6">
+            <div className="flex flex-col items-center">
+              <div className="flex items-start justify-between w-full max-w-2xl mx-auto relative">
+                {/* Step Circles */}
+                {steps.map((step, index) => (
+                  <div
+                    key={step.number}
+                    className="flex flex-col items-center flex-1 relative z-10"
+                  >
+                    <div
+                      className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 shrink-0 ${
+                        currentStep === step.number
+                          ? "bg-primary text-primary-foreground ring-4 ring-primary/20"
+                          : step.completed
+                          ? "bg-primary/80 text-primary-foreground"
+                          : "bg-muted border-2 border-muted-foreground/30 text-muted-foreground"
+                      }`}
+                    >
+                      {step.completed ? (
+                        <CheckCircle2 className="w-6 h-6" />
+                      ) : (
+                        <span className="text-sm font-semibold">{step.number}</span>
+                      )}
+                    </div>
+                    <span
+                      className={`mt-2 text-xs md:text-sm font-medium text-center px-2 max-w-[120px] leading-tight ${
+                        currentStep === step.number
+                          ? "text-primary font-semibold"
+                          : step.completed
+                          ? "text-primary"
+                          : "text-muted-foreground"
+                      }`}
+                      style={{
+                        wordWrap: 'break-word',
+                        overflowWrap: 'break-word',
+                        lineHeight: '1.4',
+                      }}
+                    >
+                      {step.title}
+                    </span>
+                  </div>
+                ))}
+
+                {/* First Connecting Line - Between Step 1 and Step 2 */}
+                <div
+                  className={`absolute top-5 h-0.5 transition-colors duration-300 ${
+                    steps[0].completed ? "bg-primary" : "bg-muted"
+                  }`}
+                  style={{
+                    left: 'calc(16.666% + 20px)',
+                    width: 'calc(33.333% - 40px)',
+                  }}
+                />
+
+                {/* Second Connecting Line - Between Step 2 and Step 3 */}
+                <div
+                  className={`absolute top-5 h-0.5 transition-colors duration-300 ${
+                    steps[1].completed ? "bg-primary" : "bg-muted"
+                  }`}
+                  style={{
+                    left: 'calc(50% + 20px)',
+                    width: 'calc(33.333% - 40px)',
+                  }}
+                />
+              </div>
+              <div className="mt-4 text-sm text-muted-foreground">
+                Step {currentStep} of {steps.length}
+              </div>
             </div>
-          </CollapsibleTrigger>
-          <CollapsibleContent>
-            <Card className="rounded-t-none border-t-0">
-              <CardContent className="pt-6">
-                <div className="space-y-5">
+          </CardContent>
+        </Card>
+
+        {/* Wizard Form Steps */}
+        <Card className="shadow-elegant">
+          <CardContent className="pt-6">
+            {/* Step 1: Personal Details */}
+            {currentStep === 1 && (
+              <div className="space-y-5 animate-in fade-in-0 slide-in-from-right-4 duration-300">
+                <div className="mb-6">
+                  <h2 className="text-xl md:text-2xl font-semibold text-foreground mb-2">
+                    Personal Details
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    Please provide your personal information below.
+                  </p>
+                </div>
+
+                <FormField
+                  label="Full name as per NRIC"
+                  value={formData.fullName}
+                  onChange={(v) => handleInputChange("fullName", v)}
+                  placeholder="Enter your full name"
+                />
+                <FormField
+                  label="I/C No."
+                  value={formData.icNo}
+                  onChange={(v) => handleInputChange("icNo", v)}
+                  placeholder="020708-10-9982"
+                />
+                <FormField
+                  label="Email"
+                  type="email"
+                  value={formData.email}
+                  onChange={(v) => handleInputChange("email", v)}
+                  placeholder="example@email.com"
+                />
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <FormField
-                    label="Full name as per NRIC"
-                    value={formData.fullName}
-                    onChange={(v) => handleInputChange("fullName", v)}
-                    placeholder="Enter your full name"
+                    label="Handphone Number"
+                    value={formData.phoneNumber}
+                    onChange={(v) => handleInputChange("phoneNumber", v)}
+                    placeholder="0138912020 (Eg. 0389212020)"
                   />
                   <FormField
-                    label="I/C No."
-                    value={formData.icNo}
-                    onChange={(v) => handleInputChange("icNo", v)}
-                    placeholder="020708-10-9982"
+                    label="Handphone Number 2"
+                    value={formData.phoneNumber2}
+                    onChange={(v) => handleInputChange("phoneNumber2", v)}
+                    placeholder="0138912020 (Eg. 0389212020)"
                   />
-                  <FormField
-                    label="Email"
-                    type="email"
-                    value={formData.email}
-                    onChange={(v) => handleInputChange("email", v)}
-                    placeholder="example@email.com"
-                  />
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField
-                      label="Handphone Number"
-                      value={formData.phoneNumber}
-                      onChange={(v) => handleInputChange("phoneNumber", v)}
-                      placeholder="0138912020 (Eg. 0389212020)"
+                </div>
+              </div>
+            )}
+
+            {/* Step 2: Education & Qualification Details */}
+            {currentStep === 2 && (
+              <div className="space-y-5 animate-in fade-in-0 slide-in-from-right-4 duration-300">
+                <div className="mb-6">
+                  <h2 className="text-xl md:text-2xl font-semibold text-foreground mb-2">
+                    Education & Qualification Details
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    Please provide your education and qualification information.
+                  </p>
+                </div>
+
+                {/* Secondary School Type */}
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-muted-foreground">
+                    Secondary School Type :
+                  </Label>
+                  <Select
+                    value={formData.secondarySchoolType}
+                    onValueChange={(v) => handleInputChange("secondarySchoolType", v)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select secondary school type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="national-public">National Public School</SelectItem>
+                      <SelectItem value="national-religious">National Religious School</SelectItem>
+                      <SelectItem value="chinese-independent">Chinese Independent School</SelectItem>
+                      <SelectItem value="tamil-school">Tamil School</SelectItem>
+                      <SelectItem value="private">Private School</SelectItem>
+                      <SelectItem value="international">International School</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Secondary School Name */}
+                <FormField
+                  label="Secondary School Name :"
+                  value={formData.secondarySchoolName}
+                  onChange={(v) => handleInputChange("secondarySchoolName", v)}
+                  placeholder="Enter secondary school name"
+                />
+
+                {/* Highest Qualification to Apply */}
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-muted-foreground">
+                    Highest Qualification to Apply :
+                  </Label>
+                  <Select
+                    value={formData.highestQualification}
+                    onValueChange={(v) => handleInputChange("highestQualification", v)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select highest qualification" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="spm">SPM</SelectItem>
+                      <SelectItem value="o-level">O-Level</SelectItem>
+                      <SelectItem value="svm">SVM</SelectItem>
+                      <SelectItem value="stpm">STPM</SelectItem>
+                      <SelectItem value="a-level">A-Level</SelectItem>
+                      <SelectItem value="diploma">Diploma</SelectItem>
+                      <SelectItem value="degree">Degree</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Year of Highest Qualification */}
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-muted-foreground">
+                    Year of Highest Qualification :
+                  </Label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      type="number"
+                      className="pl-10"
+                      value={formData.yearOfHighestQualification}
+                      onChange={(e) => handleInputChange("yearOfHighestQualification", e.target.value)}
+                      placeholder="2019"
+                      min="1980"
+                      max="2030"
                     />
-                    <FormField
-                      label="Handphone Number 2"
-                      value={formData.phoneNumber2}
-                      onChange={(v) => handleInputChange("phoneNumber2", v)}
-                      placeholder="0138912020 (Eg. 0389212020)"
+                  </div>
+                </div>
+
+                {/* Year of SPM/O-Level/SVM */}
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-muted-foreground">
+                    Year of SPM/O-Level/SVM :
+                  </Label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      type="number"
+                      className="pl-10"
+                      value={formData.yearOfSPM}
+                      onChange={(e) => handleInputChange("yearOfSPM", e.target.value)}
+                      placeholder="2019"
+                      min="1980"
+                      max="2030"
                     />
                   </div>
+                </div>
 
-                  <div className="flex justify-center pt-4">
-                    <Button onClick={handleSaveProfile} className="px-8">
-                      <Save className="mr-2 h-4 w-4" />
-                      Save Profile
-                    </Button>
+                {/* Disciplinary & Termination */}
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-muted-foreground">
+                    Disciplinary & Termination :
+                  </Label>
+                  <div className="flex items-start space-x-3 pt-2">
+                    <Checkbox
+                      id="disciplinary"
+                      checked={formData.noDisciplinaryRecord}
+                      onCheckedChange={(checked) =>
+                        handleInputChange("noDisciplinaryRecord", checked === true)
+                      }
+                      className="mt-1"
+                    />
+                    <div className="flex-1">
+                      <Label
+                        htmlFor="disciplinary"
+                        className="text-sm font-normal text-foreground cursor-pointer leading-relaxed"
+                      >
+                        I declare that I have no discipline and termination record from other institutions.
+                      </Label>
+                    </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          </CollapsibleContent>
-        </Collapsible>
+              </div>
+            )}
 
-        {/* Education & Qualification Details Section */}
-        <Collapsible open={educationOpen} onOpenChange={setEducationOpen} className="mb-4">
-          <CollapsibleTrigger asChild>
-            <div className="flex items-center justify-between bg-primary text-primary-foreground px-4 py-3 rounded-lg cursor-pointer hover:bg-primary/90 transition-colors">
-              <span className="font-medium">Click here for Education & Qualification Details</span>
-              {educationOpen ? (
-                <span className="text-sm font-medium">Hide</span>
-              ) : (
-                <span className="text-sm font-medium">Show</span>
-              )}
+            {/* Step 3: Other Details */}
+            {currentStep === 3 && (
+              <div className="space-y-5 animate-in fade-in-0 slide-in-from-right-4 duration-300">
+                <div className="mb-6">
+                  <h2 className="text-xl md:text-2xl font-semibold text-foreground mb-2">
+                    Other Details
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    Please provide additional information below.
+                  </p>
+                </div>
+
+                <FormField
+                  label="Monthly Household Income (Parents/Guardian) RM"
+                  value={formData.householdIncome}
+                  onChange={(v) => handleInputChange("householdIncome", v)}
+                  placeholder="3,000.00"
+                />
+
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-muted-foreground">
+                    Bantuan Sara Hidup Rakyat (BSHR) Recipients
+                  </Label>
+                  <RadioGroup
+                    value={formData.bshrRecipient}
+                    onValueChange={(v) => handleInputChange("bshrRecipient", v)}
+                    className="flex gap-6"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="yes" id="bshr-yes" />
+                      <Label htmlFor="bshr-yes" className="cursor-pointer">Yes</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="no" id="bshr-no" />
+                      <Label htmlFor="bshr-no" className="cursor-pointer">No</Label>
+                    </div>
+                  </RadioGroup>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-muted-foreground">
+                    UNITEN Staff ID No.
+                  </Label>
+                  <Select
+                    value={formData.staffId}
+                    onValueChange={(v) => handleInputChange("staffId", v)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select staff ID" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="cfs0002">CFS0002 (Muhammad Adam Danial Bin Muha...)</SelectItem>
+                      <SelectItem value="none">Not Applicable</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            )}
+
+            {/* Navigation Buttons */}
+            <div className="flex items-center justify-between pt-6 mt-6 border-t border-border">
+              <Button
+                variant="outline"
+                onClick={handlePrevious}
+                disabled={currentStep === 1}
+                className="flex items-center gap-2"
+              >
+                <ChevronLeft className="h-4 w-4" />
+                Previous
+              </Button>
+
+              <div className="flex items-center gap-3">
+                {currentStep === 1 && (
+                  <Button onClick={handleSaveProfile} variant="ghost" className="flex items-center gap-2">
+                    <Save className="h-4 w-4" />
+                    Save
+                  </Button>
+                )}
+                {currentStep === 2 && (
+                  <Button onClick={handleSaveEducationDetails} variant="ghost" className="flex items-center gap-2">
+                    <Save className="h-4 w-4" />
+                    Save
+                  </Button>
+                )}
+                {currentStep === 3 && (
+                  <Button onClick={handleSaveOtherDetails} variant="ghost" className="flex items-center gap-2">
+                    <Save className="h-4 w-4" />
+                    Save
+                  </Button>
+                )}
+
+                <Button
+                  onClick={handleNext}
+                  disabled={currentStep === 3}
+                  className="flex items-center gap-2"
+                >
+                  Next
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
-          </CollapsibleTrigger>
-          <CollapsibleContent>
-            <Card className="rounded-t-none border-t-0 mt-0">
-              <CardContent className="pt-6">
-                <div className="space-y-5">
-                  {/* Secondary School Type */}
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">
-                      Secondary School Type :
-                    </Label>
-                    <Select
-                      value={formData.secondarySchoolType}
-                      onValueChange={(v) => handleInputChange("secondarySchoolType", v)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select secondary school type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="national-public">National Public School</SelectItem>
-                        <SelectItem value="national-religious">National Religious School</SelectItem>
-                        <SelectItem value="chinese-independent">Chinese Independent School</SelectItem>
-                        <SelectItem value="tamil-school">Tamil School</SelectItem>
-                        <SelectItem value="private">Private School</SelectItem>
-                        <SelectItem value="international">International School</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Secondary School Name */}
-                  <FormField
-                    label="Secondary School Name :"
-                    value={formData.secondarySchoolName}
-                    onChange={(v) => handleInputChange("secondarySchoolName", v)}
-                    placeholder="Enter secondary school name"
-                  />
-
-                  {/* Highest Qualification to Apply */}
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">
-                      Highest Qualification to Apply :
-                    </Label>
-                    <Select
-                      value={formData.highestQualification}
-                      onValueChange={(v) => handleInputChange("highestQualification", v)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select highest qualification" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="spm">SPM</SelectItem>
-                        <SelectItem value="o-level">O-Level</SelectItem>
-                        <SelectItem value="svm">SVM</SelectItem>
-                        <SelectItem value="stpm">STPM</SelectItem>
-                        <SelectItem value="a-level">A-Level</SelectItem>
-                        <SelectItem value="diploma">Diploma</SelectItem>
-                        <SelectItem value="degree">Degree</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Year of Highest Qualification */}
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">
-                      Year of Highest Qualification :
-                    </Label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        type="number"
-                        className="pl-10"
-                        value={formData.yearOfHighestQualification}
-                        onChange={(e) => handleInputChange("yearOfHighestQualification", e.target.value)}
-                        placeholder="2019"
-                        min="1980"
-                        max="2030"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Year of SPM/O-Level/SVM */}
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">
-                      Year of SPM/O-Level/SVM :
-                    </Label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        type="number"
-                        className="pl-10"
-                        value={formData.yearOfSPM}
-                        onChange={(e) => handleInputChange("yearOfSPM", e.target.value)}
-                        placeholder="2019"
-                        min="1980"
-                        max="2030"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Disciplinary & Termination */}
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">
-                      Disciplinary & Termination :
-                    </Label>
-                    <div className="flex items-start space-x-3 pt-2">
-                      <Checkbox
-                        id="disciplinary"
-                        checked={formData.noDisciplinaryRecord}
-                        onCheckedChange={(checked) =>
-                          handleInputChange("noDisciplinaryRecord", checked === true)
-                        }
-                        className="mt-1"
-                      />
-                      <div className="flex-1">
-                        <Label
-                          htmlFor="disciplinary"
-                          className="text-sm font-normal text-foreground cursor-pointer leading-relaxed"
-                        >
-                          I declare that I have no discipline and termination record from other institutions.
-                        </Label>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex justify-center pt-4">
-                    <Button onClick={handleSaveEducationDetails} className="px-8">
-                      <Save className="mr-2 h-4 w-4" />
-                      Save Education Details
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </CollapsibleContent>
-        </Collapsible>
-
-        {/* Other Details Section */}
-        <Collapsible open={otherOpen} onOpenChange={setOtherOpen} className="mb-4">
-          <CollapsibleTrigger asChild>
-            <div className="flex items-center justify-between bg-primary text-primary-foreground px-4 py-3 rounded-t-lg cursor-pointer hover:bg-primary/90 transition-colors">
-              <span className="font-medium">Click here for Other Details</span>
-              {otherOpen ? (
-                <span className="text-sm font-medium">Hide</span>
-              ) : (
-                <span className="text-sm font-medium">Show</span>
-              )}
-            </div>
-          </CollapsibleTrigger>
-          <CollapsibleContent>
-            <Card className="rounded-t-none border-t-0">
-              <CardContent className="pt-6">
-                <div className="space-y-5">
-                  <FormField
-                    label="Monthly Household Income (Parents/Guardian) RM"
-                    value={formData.householdIncome}
-                    onChange={(v) => handleInputChange("householdIncome", v)}
-                    placeholder="3,000.00"
-                  />
-
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">
-                      Bantuan Sara Hidup Rakyat (BSHR) Recipients
-                    </Label>
-                    <RadioGroup
-                      value={formData.bshrRecipient}
-                      onValueChange={(v) => handleInputChange("bshrRecipient", v)}
-                      className="flex gap-6"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="yes" id="bshr-yes" />
-                        <Label htmlFor="bshr-yes" className="cursor-pointer">Yes</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="no" id="bshr-no" />
-                        <Label htmlFor="bshr-no" className="cursor-pointer">No</Label>
-                      </div>
-                    </RadioGroup>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">
-                      UNITEN Staff ID No.
-                    </Label>
-                    <Select
-                      value={formData.staffId}
-                      onValueChange={(v) => handleInputChange("staffId", v)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select staff ID" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="cfs0002">CFS0002 (Muhammad Adam Danial Bin Muha...)</SelectItem>
-                        <SelectItem value="none">Not Applicable</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="flex justify-center pt-4">
-                    <Button onClick={handleSaveOtherDetails} className="px-8">
-                      <Save className="mr-2 h-4 w-4" />
-                      Save Other Details
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </CollapsibleContent>
-        </Collapsible>
+          </CardContent>
+        </Card>
       </div>
       </main>
       <Footer />

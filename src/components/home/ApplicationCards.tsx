@@ -5,39 +5,21 @@ import { ArrowRight } from "lucide-react";
 const applicationTypes = [
   {
     title: "Foundation / Diploma",
-    subtitle: "(MALAYSIAN)",
+    subtitle: "(MALAYSIAN / INTERNATIONAL)",
     path: "/apply/foundation-malaysian",
     delay: "0ms",
   },
   {
-    title: "Foundation / Diploma",
-    subtitle: "(INTERNATIONAL)",
-    path: "/apply/foundation-international",
+    title: "Bachelor",
+    subtitle: "(MALAYSIAN / INTERNATIONAL)",
+    path: "/apply/bachelor-malaysian",
     delay: "100ms",
   },
   {
-    title: "Bachelor",
-    subtitle: "(MALAYSIAN)",
-    path: "/apply/bachelor-malaysian",
-    delay: "200ms",
-  },
-  {
-    title: "Bachelor",
-    subtitle: "(INTERNATIONAL)",
-    path: "/apply/bachelor-international",
-    delay: "300ms",
-  },
-  {
     title: "Postgraduate",
-    subtitle: "(MALAYSIAN)",
+    subtitle: "(MALAYSIAN / INTERNATIONAL)",
     path: "/apply/postgraduate-malaysian",
-    delay: "400ms",
-  },
-  {
-    title: "Postgraduate",
-    subtitle: "(INTERNATIONAL)",
-    path: "/apply/postgraduate-international",
-    delay: "500ms",
+    delay: "200ms",
   },
 ];
 
@@ -45,7 +27,7 @@ const ApplicationCards = () => {
   return (
     <section className="py-12 md:py-20 bg-background">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto">
           {applicationTypes.map((type, index) => (
             <div
               key={index}
