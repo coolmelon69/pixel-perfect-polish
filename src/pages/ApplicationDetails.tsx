@@ -498,8 +498,8 @@ const ApplicationDetails = () => {
                   disabled={currentStep === 3}
                   className="flex items-center gap-2"
                 >
-                  Next
-                  <ChevronRight className="h-4 w-4" />
+                  {currentStep === 3 ? "Submit" : "Next"}
+                  {currentStep !== 3 && <ChevronRight className="h-4 w-4" />}
                 </Button>
               </div>
             </div>

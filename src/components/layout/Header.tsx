@@ -18,9 +18,6 @@ const Header = () => {
 
   return (
     <header className="w-full">
-      {/* Top bar */}
-      <div className="h-1.5 bg-topbar" />
-      
       {/* Main header */}
       <div className="bg-card shadow-sm">
         <div className="container mx-auto px-4 py-4">
