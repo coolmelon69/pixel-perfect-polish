@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { User, Save, CheckCircle2, Circle, ChevronLeft, ChevronRight, Home } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -21,6 +21,7 @@ import { toast } from "@/hooks/use-toast";
 import heroImage from "@/assets/hero-library.jpg";
 
 const ApplicationDetails = () => {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -79,6 +80,9 @@ const ApplicationDetails = () => {
   const handlePrevious = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
+    } else if (currentStep === 1) {
+      // Navigate back to previous page
+      navigate(-1);
     }
   };
 
@@ -499,7 +503,6 @@ const ApplicationDetails = () => {
               <Button
                 variant="outline"
                 onClick={handlePrevious}
-                disabled={currentStep === 1}
                 className="flex items-center gap-2"
               >
                 <ChevronLeft className="h-4 w-4" />
