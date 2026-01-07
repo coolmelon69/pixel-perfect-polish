@@ -39,12 +39,14 @@ const HeroCarousel = () => {
                   alt={slide.title}
                   className="w-full h-full object-cover"
                 />
+                {/* Color Overlay */}
+                <div className="absolute inset-0 bg-foreground/30" />
                 {/* Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-foreground/80" />
                 
                 {/* Content */}
-                <div className="absolute right-6 md:right-12 top-1/2 -translate-y-1/2 text-right max-w-sm">
-                  <h2 className="text-xl md:text-3xl lg:text-4xl font-bold text-card leading-tight mb-3 drop-shadow-lg">
+                <div className="absolute right-6 md:right-12 top-1/2 -translate-y-1/2 text-right max-w-lg md:max-w-xl lg:max-w-2xl">
+                  <h2 className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-card leading-tight mb-3 drop-shadow-2xl tracking-tight">
                     {slide.title}
                   </h2>
                   <p className="text-sm md:text-base text-card/90 drop-shadow-md">

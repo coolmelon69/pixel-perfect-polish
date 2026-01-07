@@ -66,7 +66,7 @@ const Footer = () => {
 
         <div className="border-t border-topbar-foreground/20 pt-8">
           <p className="text-center text-sm text-topbar-foreground/60">
-            © {new Date().getFullYear()} Universiti Tenaga Nasional. All rights reserved.
+            Made by Adam Danial
           </p>
         </div>
       </div>
