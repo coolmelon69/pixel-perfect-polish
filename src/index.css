@@ -17,7 +17,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 15%;
 
-    /* UNITEN Brand Red - Primary */
+    /* UNITEN Brand Red - Primary (default, can be overridden by theme) */
     --primary: 355 75% 47%;
     --primary-foreground: 0 0% 100%;
     
@@ -46,7 +46,7 @@
     --topbar: 0 0% 12%;
     --topbar-foreground: 0 0% 100%;
 
-    /* Gradient definitions */
+    /* Gradient definitions (can be overridden by theme) */
     --gradient-primary: linear-gradient(135deg, hsl(355 75% 47%), hsl(355 75% 40%));
     --gradient-hero: linear-gradient(180deg, hsl(0 0% 0% / 0.3), hsl(0 0% 0% / 0.6));
     --gradient-card: linear-gradient(145deg, hsl(355 75% 47%), hsl(355 65% 35%));
@@ -67,6 +67,8 @@
     --sidebar-border: 0 0% 91%;
     --sidebar-ring: 355 75% 47%;
   }
+
+  /* Theme-specific overrides will be applied via JavaScript to :root */
 
   .dark {
     --background: 0 0% 8%;

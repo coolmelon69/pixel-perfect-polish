@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import unitenLogo from "@/assets/uniten_logo.png";
+import ThemeSwitcher from "@/components/theme/ThemeSwitcher";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -76,6 +77,8 @@ const Header = () => {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
+
+              <ThemeSwitcher />
             </nav>
 
             {/* Mobile Menu Button */}
@@ -124,6 +127,12 @@ const Header = () => {
                   >
                     Bachelor/Postgraduate
                   </Link>
+                </div>
+                <div className="pt-2 border-t border-border">
+                  <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                    <span>Theme:</span>
+                    <ThemeSwitcher />
+                  </div>
                 </div>
               </div>
             </nav>
