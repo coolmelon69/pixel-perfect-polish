@@ -65,7 +65,7 @@ const programmes: Programme[] = [
     programmeLink: "#",
     icon: BookOpen,
     color: "red",
-    intakes: ["S1,25/26", "S2,25/26"], // Multiple intakes
+    intakes: ["June 2026", "September 2026"], // Multiple intakes
   },
   {
     title: "BACHELOR",
@@ -75,7 +75,7 @@ const programmes: Programme[] = [
     programmeLink: "#",
     icon: GraduationCap,
     color: "blue",
-    intakes: ["S1,25/26"], // Single intake
+    intakes: ["June 2026"], // Single intake
   },
   {
     title: "POSTGRADUATE",
@@ -85,7 +85,7 @@ const programmes: Programme[] = [
     programmeLink: "#",
     icon: Award,
     color: "grey",
-    intakes: ["S1,25/26", "S2,25/26"], // Multiple intakes
+    intakes: ["June 2026", "September 2026"], // Multiple intakes
   },
   {
     title: "SPECIAL PROGRAMME",
@@ -96,7 +96,7 @@ const programmes: Programme[] = [
     programmeLink: "#",
     icon: Settings,
     color: "blue",
-    intakes: ["S1,25/26"], // Single intake
+    intakes: ["June 2026"], // Single intake
   },
 ];
 
@@ -307,7 +307,7 @@ const Admissions = () => {
                         disabled={programme.status === "CLOSED"}
                         asChild
                       >
-                        <Link to="/application-details" className="flex items-center justify-center gap-2">
+                        <Link to="/apply/foundation-malaysian" className="flex items-center justify-center gap-2">
                           {programme.status === "CLOSED" ? (
                             <>
                               <XCircle className="w-4 h-4" />
@@ -355,7 +355,7 @@ const Admissions = () => {
                         disabled={programme.status === "CLOSED"}
                         asChild
                       >
-                        <Link to="/application-details" className="flex items-center justify-center gap-2">
+                        <Link to="/apply/foundation-malaysian" className="flex items-center justify-center gap-2">
                           {programme.status === "CLOSED" ? (
                             <>
                               <XCircle className="w-4 h-4" />

@@ -36,8 +36,8 @@ const ApplicationForm = () => {
   const navigate = useNavigate();
   
   const handleGoogleSignIn = () => {
-    // Demo: Redirect to admissions page
-    navigate("/admissions");
+    // Demo: Redirect to application form
+    navigate("/application-details");
   };
 
   return (
