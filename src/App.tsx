@@ -8,6 +8,9 @@ import Index from "./pages/Index";
 import ApplicationForm from "./pages/ApplicationForm";
 import ApplicationDetails from "./pages/ApplicationDetails";
 import Admissions from "./pages/Admissions";
+import PersonalProfile from "./pages/PersonalProfile";
+import EditProfile from "./pages/EditProfile";
+import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
 import { themes, type ThemeName, defaultTheme } from "./lib/theme-config";
 
@@ -58,6 +61,9 @@ const App = () => (
           <Route path="/admissions" element={<Admissions />} />
           <Route path="/apply/:type" element={<ApplicationForm />} />
           <Route path="/application-details" element={<ApplicationDetails />} />
+          <Route path="/personal-profile" element={<PersonalProfile />} />
+          <Route path="/edit-profile" element={<EditProfile />} />
+          <Route path="/privacy" element={<Privacy />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

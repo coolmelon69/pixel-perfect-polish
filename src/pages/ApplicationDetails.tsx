@@ -142,7 +142,7 @@ const ApplicationDetails = () => {
                   Thank you! Your application has been submitted successfully. We will contact you soon regarding your application.
                 </p>
                 <Button asChild className="flex items-center gap-2">
-                  <Link to="/">
+                  <Link to="/personal-profile">
                     <Home className="h-4 w-4" />
                     Return Home
                   </Link>

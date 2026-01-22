@@ -1,10 +1,19 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import { 
   Mail, 
   Phone, 
@@ -31,6 +40,7 @@ interface Programme {
   programmeLink: string;
   icon: React.ComponentType<{ className?: string }>;
   color: "red" | "blue" | "grey";
+  intakes: string[]; // Array of intake options (e.g., ["S1,25/26", "S2,25/26"])
 }
 
 interface ContactPerson {
@@ -55,6 +65,7 @@ const programmes: Programme[] = [
     programmeLink: "#",
     icon: BookOpen,
     color: "red",
+    intakes: ["S1,25/26", "S2,25/26"], // Multiple intakes
   },
   {
     title: "BACHELOR",
@@ -64,6 +75,7 @@ const programmes: Programme[] = [
     programmeLink: "#",
     icon: GraduationCap,
     color: "blue",
+    intakes: ["S1,25/26"], // Single intake
   },
   {
     title: "POSTGRADUATE",
@@ -73,6 +85,7 @@ const programmes: Programme[] = [
     programmeLink: "#",
     icon: Award,
     color: "grey",
+    intakes: ["S1,25/26", "S2,25/26"], // Multiple intakes
   },
   {
     title: "SPECIAL PROGRAMME",
@@ -83,6 +96,7 @@ const programmes: Programme[] = [
     programmeLink: "#",
     icon: Settings,
     color: "blue",
+    intakes: ["S1,25/26"], // Single intake
   },
 ];
 
@@ -188,6 +202,22 @@ const contactGroups: ContactGroup[] = [
 ];
 
 const Admissions = () => {
+  // State to track selected intake for each programme and student type
+  const [selectedIntakes, setSelectedIntakes] = useState<Record<string, Record<string, string>>>({});
+
+  const handleIntakeChange = (programmeIndex: number, studentType: "malaysian" | "international", value: string) => {
+    const key = `${programmeIndex}-${studentType}`;
+    setSelectedIntakes((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+
+  const getSelectedIntake = (programmeIndex: number, studentType: "malaysian" | "international", intakes: string[]) => {
+    const key = `${programmeIndex}-${studentType}`;
+    return selectedIntakes[key] || intakes[0]; // Default to first intake
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
@@ -252,6 +282,25 @@ const Admissions = () => {
                         <Users className="w-3 h-3" />
                         For MALAYSIAN Students
                       </p>
+                      <div className="space-y-2">
+                        <Label className="text-xs font-medium text-muted-foreground">Open Intake</Label>
+                        <Select
+                          value={getSelectedIntake(index, "malaysian", programme.intakes)}
+                          onValueChange={(value) => handleIntakeChange(index, "malaysian", value)}
+                          disabled={programme.status === "CLOSED"}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select intake" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {programme.intakes.map((intake, intakeIndex) => (
+                              <SelectItem key={intakeIndex} value={intake}>
+                                {intake}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
                       <Button
                         variant={programme.status === "CLOSED" ? "outline" : "default"}
                         className="w-full"
@@ -281,6 +330,25 @@ const Admissions = () => {
                         <Globe className="w-3 h-3" />
                         For INTERNATIONAL Students
                       </p>
+                      <div className="space-y-2">
+                        <Label className="text-xs font-medium text-muted-foreground">Open Intake</Label>
+                        <Select
+                          value={getSelectedIntake(index, "international", programme.intakes)}
+                          onValueChange={(value) => handleIntakeChange(index, "international", value)}
+                          disabled={programme.status === "CLOSED"}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select intake" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {programme.intakes.map((intake, intakeIndex) => (
+                              <SelectItem key={intakeIndex} value={intake}>
+                                {intake}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
                       <Button
                         variant={programme.status === "CLOSED" ? "outline" : "default"}
                         className="w-full"
